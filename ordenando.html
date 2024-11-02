@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordenando Valores</title>
+    <script src="ordenando.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container">
+    <h1 class="text-center">Ordenando Valores</h1>
+    <div class="mb-3">
+        <label for="valor">Valor</label>
+        <input type="text" id="valor" class="form-control">
+        <button class="btn btn-primary mt-2" onclick="add()">Adicionar</button>
+    </div>
+    <div class="mb-3">
+        <select id="algoritmo" class="form-select">
+            <option value="bubble_sort">Bubble Sort</option>
+            <option value="selection_sort">Selection Sort</option>
+            <option value="quick_sort">Quick Sort</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" onclick="ordenar()">Ordenar</button>
+        <button class="btn btn-primary" onclick="misturar()">Misturar</button>
+    </div>
+    <ul id="valores" class="list-unstyled"></ul>
+
+    <script>
+        function add() {
+            const valorInput = document.getElementById("valor");
+            if (isNaN(valorInput.value) || valorInput.value.trim() === "") {
+                alert("Por favor, insira um número válido.");
+                valorInput.value = "";
+                valorInput.focus();
+                return;
+            }
+            const listaValores = document.getElementById("valores");
+            
+            if (valorInput.value !== "") {
+                const node = document.createElement("li");
+                const textNode = document.createTextNode(valorInput.value);
+                node.appendChild(textNode);
+                listaValores.appendChild(node);
+                valorInput.value = "";
+                valorInput.focus();
+            }
+        }
+
+        function ordenar() {
+            const listaValores = document.getElementById("valores");
+            const algoritmoSelect = document.getElementById("algoritmo");
+            
+            let valoresArray = Array.from(listaValores.children).map(item => parseFloat(item.innerHTML));
+
+            switch (algoritmoSelect.value) {
+                case "bubble_sort":
+                    bubble_sort(valoresArray);
+                    break;
+                case "selection_sort":
+                    selection_sort(valoresArray);
+                    break;
+                case "quick_sort":
+                    quick_sort(valoresArray);
+                    break;
+            }
+
+            listaValores.innerHTML = valoresArray.map(val => `<li>${val}</li>`).reduce((acc, li) => acc + li, "");
+        }
+
+        function misturar() {
+            const listaValores = document.getElementById("valores");
+            
+            let valoresArray = Array.from(listaValores.children).map(item => parseInt(item.innerHTML));
+            shuffle(valoresArray, valoresArray.length);
+
+            listaValores.innerHTML = valoresArray.map(val => `<li>${val}</li>`).reduce((acc, li) => acc + li, "");
+        }
+    </script>
+</body>
+</html>
